@@ -26,14 +26,14 @@ class SuperheroCard extends StatelessWidget {
             width: 70,
             fit: BoxFit.cover,
           ),
-          SizedBox(width: 8),
+          SizedBox(width: 12),
           Expanded(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                name,
+                name.toUpperCase(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

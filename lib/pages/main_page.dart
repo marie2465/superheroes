@@ -212,8 +212,8 @@ class Favorites extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SuperheroCard(
-              name: "Batman".toUpperCase(),
-              realName: "Bruce Wayen",
+              name: "Batman",
+              realName: "Bruce Wayne",
               imageUrl:
                   "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg"),
         ),
@@ -221,7 +221,7 @@ class Favorites extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SuperheroCard(
-              name: "Ironman".toUpperCase(),
+              name: "Ironman",
               realName: "Tony Stark",
               imageUrl:
                   "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg"),

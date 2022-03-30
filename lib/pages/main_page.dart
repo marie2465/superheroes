@@ -188,7 +188,7 @@ class Favorites extends StatelessWidget {
                 "https://www.superherodb.com/pictures2/portraits/10/100/639.jpg",
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SuperheroPage(name: "BATMAN",)));
+                  MaterialPageRoute(builder: (context) => SuperheroPage(name: "Batman",)));
             },
           ),
         ),
@@ -202,7 +202,7 @@ class Favorites extends StatelessWidget {
                 "https://www.superherodb.com/pictures2/portraits/10/100/85.jpg",
             onTap: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SuperheroPage(name: "IRONMAN",)));
+                  MaterialPageRoute(builder: (context) => SuperheroPage(name: "Ironman",)));
             },
           ),
         ),
@@ -219,10 +219,10 @@ class SearchResults extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 90),
-        Padding(
+        const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            "Search result",
+            "Search results",
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w800,
@@ -232,7 +232,7 @@ class SearchResults extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: SuperheroCard(
             name: "Batman",
             realName: "Bruce Wayne,",

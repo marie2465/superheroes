@@ -14,7 +14,8 @@ class SuperheroPage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            Center(
+            Align(
+              alignment: Alignment.center,
               child: Text(
                 name.toUpperCase(),
                 style: TextStyle(

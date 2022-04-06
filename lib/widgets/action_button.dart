@@ -22,7 +22,7 @@ class ActionButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
-          text,
+          text.toUpperCase(),
           style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),

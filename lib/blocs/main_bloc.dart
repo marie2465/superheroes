@@ -65,11 +65,20 @@ class MainBloc {
     await Future.delayed(Duration(seconds: 1));
     return SuperheroInfo.mocked
         .where((superheroInfo) =>
-            superheroInfo.name.toLowerCase().contains(text.toLowerCase()))
+        superheroInfo.name.toLowerCase().contains(text.toLowerCase()))
         .toList();
   }
 
   Stream<MainPageState> observeMainPageState() => stateSubject;
+
+  void removeFavorite(){
+    final List<SuperheroInfo> currentFavorites = favoritesSuperheroesSubject.value;
+    if(currentFavorites.isEmpty){
+      favoritesSuperheroesSubject.add(SuperheroInfo.mocked);
+    } else{
+      favoritesSuperheroesSubject.add(currentFavorites.sublist(0, currentFavorites.length-1));
+    }
+  }
 
   void nextState() {
     final currentState = stateSubject.value;

@@ -5,6 +5,7 @@ import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/superhero_page.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
+import 'package:superheroes/widgets/action_button.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 
 import '../widgets/superhero_card.dart';
@@ -137,7 +138,16 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.loading:
             return const LoadingIndicator();
           case MainPageState.noFavorites:
-            return const NoFavorites();
+            return Stack(
+              children: [
+                const NoFavorites(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ActionButton(
+                      text: "Remove", onTap: () => bloc.removeFavorite()),
+                ),
+              ],
+            );
           case MainPageState.minSymbols:
             return const MinSymbols();
           case MainPageState.searchResults:
@@ -145,9 +155,17 @@ class MainPageStateWidget extends StatelessWidget {
                 title: "Search results",
                 stream: bloc.observeSearchedSuperheroes());
           case MainPageState.favorites:
-            return SuperheroesList(
-                title: "Your favorites",
-                stream: bloc.observeFavoriteSuperheroes());
+            return Stack(
+              children: [
+                SuperheroesList(
+                    title: "Your favorites",
+                    stream: bloc.observeFavoriteSuperheroes()),
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: ActionButton(
+                        text: "Remove", onTap: () => bloc.removeFavorite()))
+              ],
+            );
           case MainPageState.nothingFound:
             return const NothingFound();
           case MainPageState.loadingError:

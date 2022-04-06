@@ -60,6 +60,7 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
   final TextEditingController controller = TextEditingController();
+  bool haveSearchedText = false;
 
   @override
   void initState() {
@@ -67,6 +68,12 @@ class _SearchWidgetState extends State<SearchWidget> {
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
       controller.addListener(() => bloc.updateText(controller.text));
+      final haveText = controller.text.isNotEmpty;
+      if (haveSearchedText != haveText) {
+        setState(() {
+          haveSearchedText = haveText;
+        });
+      }
     });
   }
 
@@ -99,7 +106,9 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Colors.white24),
+            borderSide: haveSearchedText
+                ? BorderSide(color: Colors.white, width: 2)
+                : BorderSide(color: Colors.white24),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),

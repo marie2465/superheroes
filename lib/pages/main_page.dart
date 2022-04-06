@@ -67,13 +67,15 @@ class _SearchWidgetState extends State<SearchWidget> {
     super.initState();
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
       final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
-      controller.addListener(() => bloc.updateText(controller.text));
-      final haveText = controller.text.isNotEmpty;
-      if (haveSearchedText != haveText) {
-        setState(() {
-          haveSearchedText = haveText;
-        });
-      }
+      controller.addListener(() {
+        bloc.updateText(controller.text);
+        final haveText = controller.text.isNotEmpty;
+        if (haveSearchedText != haveText) {
+          setState(() {
+            haveSearchedText = haveText;
+          });
+        }
+      });
     });
   }
 

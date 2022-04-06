@@ -19,10 +19,13 @@ class MainBloc {
 
     textSubscription =
         Rx.combineLatest2<String, List<SuperheroInfo>, MainPageStateInfo>(
-                currentTextSubject.distinct().debounceTime(const Duration(milliseconds: 500)),
-                favoritesSuperheroesSubject,
-                (searchedText, favorites) => MainPageStateInfo(searchedText, favorites.isNotEmpty),
-        ).listen((value) {
+      currentTextSubject
+          .distinct()
+          .debounceTime(const Duration(milliseconds: 500)),
+      favoritesSuperheroesSubject,
+      (searchedText, favorites) =>
+          MainPageStateInfo(searchedText, favorites.isNotEmpty),
+    ).listen((value) {
       searchSubscription?.cancel();
       if (value.searchText.isEmpty) {
         if (value.haveFavorites) {
@@ -60,7 +63,10 @@ class MainBloc {
 
   Future<List<SuperheroInfo>> search(final String text) async {
     await Future.delayed(Duration(seconds: 1));
-    return SuperheroInfo.mocked;
+    return SuperheroInfo.mocked
+        .where((superheroInfo) =>
+            superheroInfo.name.toLowerCase().contains(text.toLowerCase()))
+        .toList();
   }
 
   Stream<MainPageState> observeMainPageState() => stateSubject;

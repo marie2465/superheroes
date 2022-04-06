@@ -5,7 +5,6 @@ import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/superhero_page.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
-import 'package:superheroes/widgets/action_button.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
 
 import '../widgets/superhero_card.dart';
@@ -83,23 +82,30 @@ class _SearchWidgetState extends State<SearchWidget> {
           fontSize: 20,
           color: Colors.white,
         ),
+        cursorColor: Colors.white,
+        textInputAction: TextInputAction.search,
+        textCapitalization: TextCapitalization.words,
         decoration: InputDecoration(
-            filled: true,
-            fillColor: SuperheroesColors.indigo75,
-            isDense: true,
-            prefixIcon:
-                const Icon(Icons.search, color: Colors.white54, size: 24),
-            suffix: GestureDetector(
-              onTap: () => controller.clear(),
-              child: const Icon(Icons.clear, color: Colors.white),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: Colors.white24),
-            )),
+          filled: true,
+          fillColor: SuperheroesColors.indigo75,
+          isDense: true,
+          prefixIcon: const Icon(Icons.search, color: Colors.white54, size: 24),
+          suffix: GestureDetector(
+            onTap: () => controller.clear(),
+            child: const Icon(Icons.clear, color: Colors.white),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.white24),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.white, width: 2),
+          ),
+        ),
       ),
     );
   }
@@ -228,15 +234,16 @@ class SuperheroesList extends StatelessWidget {
           }
           final List<SuperheroInfo> superheroes = snapshot.data!;
           return ListView.separated(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             itemCount: superheroes.length + 1,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
                 return Padding(
-                  padding:
-                      EdgeInsets.only(left: 16, right: 16, top: 90, bottom: 12),
+                  padding: const EdgeInsets.only(
+                      left: 16, right: 16, top: 90, bottom: 12),
                   child: Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
@@ -248,9 +255,7 @@ class SuperheroesList extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SuperheroCard(
-                  name: item.name,
-                  realName: item.realName,
-                  imageUrl: item.imageUrl,
+                  superheroInfo: item,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => SuperheroPage(

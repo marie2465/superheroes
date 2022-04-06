@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/resources/superheroes_colors.dart';
 
 class SuperheroCard extends StatelessWidget {
-  final String name;
-  final String realName;
-  final String imageUrl;
+  final SuperheroInfo superheroInfo;
   final VoidCallback onTap;
 
   SuperheroCard({
     Key? key,
-    required this.name,
-    required this.realName,
-    required this.imageUrl,
+    required this.superheroInfo,
     required this.onTap,
   }) : super(key: key);
 
@@ -29,28 +26,28 @@ class SuperheroCard extends StatelessWidget {
         child: Row(
           children: [
             Image(
-              image: NetworkImage(imageUrl),
+              image: NetworkImage(superheroInfo.imageUrl),
               height: 70,
               width: 70,
               fit: BoxFit.cover,
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Expanded(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  name.toUpperCase(),
-                  style: TextStyle(
+                  superheroInfo.name.toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
                 Text(
-                  realName,
-                  style: TextStyle(
+                  superheroInfo.realName,
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.white,
                   ),

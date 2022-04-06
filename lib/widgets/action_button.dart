@@ -5,7 +5,7 @@ class ActionButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  ActionButton({
+  const ActionButton({
     Key? key,
     required this.text,
     required this.onTap,
@@ -23,7 +23,7 @@ class ActionButton extends StatelessWidget {
         ),
         child: Text(
           text.toUpperCase(),
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),

@@ -268,7 +268,7 @@ class NoFavorites extends StatelessWidget {
       child: InfoWithButton(
           title: "No favorites yet",
           subtitle: "Search and add",
-          buttonText: "SEARCH",
+          buttonText: "Search",
           assetImage: SuperheroesImages.ironman,
           imageHeight: 119,
           imageWidth: 108,
@@ -351,7 +351,7 @@ class NothingFound extends StatelessWidget {
       child: InfoWithButton(
         title: "Nothing found",
         subtitle: "Search for something else",
-        buttonText: "SEARCH",
+        buttonText: "Search",
         assetImage: SuperheroesImages.hulk,
         imageHeight: 112,
         imageWidth: 84,

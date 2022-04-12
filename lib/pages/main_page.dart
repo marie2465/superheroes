@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:superheroes/blocs/main_bloc.dart';
 import 'package:superheroes/pages/superhero_page.dart';
@@ -7,12 +8,12 @@ import 'package:superheroes/resources/superheroes_colors.dart';
 import 'package:superheroes/resources/superheroes_images.dart';
 import 'package:superheroes/widgets/action_button.dart';
 import 'package:superheroes/widgets/info_with_button.dart';
-import 'package:http/http.dart' as http;
 
 import '../widgets/superhero_card.dart';
 
 class MainPage extends StatefulWidget {
   final http.Client? client;
+
   MainPage({Key? key, this.client}) : super(key: key);
 
   @override
@@ -25,7 +26,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    bloc = MainBloc(client:  widget.client);
+    bloc = MainBloc(client: widget.client);
   }
 
   @override
@@ -49,19 +50,30 @@ class _MainPageState extends State<MainPage> {
 }
 
 class MainPageContent extends StatelessWidget {
+  final FocusNode searchFieldFocusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        MainPageStateWidget(),
-        const SearchWidget(),
+        MainPageStateWidget(
+          searchFieldFocusNode: searchFieldFocusNode,
+        ),
+        SearchWidget(
+          searchFieldFocusNode: searchFieldFocusNode,
+        ),
       ],
     );
   }
 }
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({Key? key}) : super(key: key);
+  final FocusNode searchFieldFocusNode;
+
+  const SearchWidget({
+    Key? key,
+    required this.searchFieldFocusNode,
+  }) : super(key: key);
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -94,6 +106,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
       child: TextField(
+        focusNode: widget.searchFieldFocusNode,
         controller: controller,
         style: const TextStyle(
           fontWeight: FontWeight.w400,
@@ -132,6 +145,13 @@ class _SearchWidgetState extends State<SearchWidget> {
 }
 
 class MainPageStateWidget extends StatelessWidget {
+  final FocusNode searchFieldFocusNode;
+
+  const MainPageStateWidget({
+    Key? key,
+    required this.searchFieldFocusNode,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
@@ -148,7 +168,9 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.noFavorites:
             return Stack(
               children: [
-                const NoFavorites(),
+                NoFavorites(
+                  searchFieldFocusNode: searchFieldFocusNode,
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: ActionButton(
@@ -175,9 +197,13 @@ class MainPageStateWidget extends StatelessWidget {
               ],
             );
           case MainPageState.nothingFound:
-            return const NothingFound();
+            return NothingFound(
+              searchFieldFocusNode: searchFieldFocusNode,
+            );
           case MainPageState.loadingError:
-            return const LoadingError();
+            return LoadingError(
+              onTap: () => bloc.retry(),
+            );
           default:
             return Center(
                 child: Text(
@@ -197,7 +223,7 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return const Align(
       alignment: Alignment.topCenter,
       child: Padding(
         padding: EdgeInsets.only(top: 110),
@@ -215,7 +241,7 @@ class MinSymbols extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
+    return const Align(
       alignment: Alignment.topCenter,
       child: Padding(
         padding: EdgeInsets.only(top: 110),
@@ -233,20 +259,23 @@ class MinSymbols extends StatelessWidget {
 }
 
 class NoFavorites extends StatelessWidget {
-  const NoFavorites({Key? key}) : super(key: key);
+  final FocusNode searchFieldFocusNode;
+
+  const NoFavorites({Key? key, required this.searchFieldFocusNode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: InfoWithButton(
-        title: "No favorites yet",
-        subtitle: "Search and add",
-        buttonText: "Search",
-        assetImage: SuperheroesImages.ironman,
-        imageHeight: 119,
-        imageWidth: 108,
-        imageTopPadding: 9,
-      ),
+          title: "No favorites yet",
+          subtitle: "Search and add",
+          buttonText: "Search",
+          assetImage: SuperheroesImages.ironman,
+          imageHeight: 119,
+          imageWidth: 108,
+          imageTopPadding: 9,
+          onTap: () => searchFieldFocusNode.requestFocus()),
     );
   }
 }
@@ -311,7 +340,12 @@ class SuperheroesList extends StatelessWidget {
 }
 
 class NothingFound extends StatelessWidget {
-  const NothingFound({Key? key}) : super(key: key);
+  final FocusNode searchFieldFocusNode;
+
+  const NothingFound({
+    Key? key,
+    required this.searchFieldFocusNode,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -324,26 +358,29 @@ class NothingFound extends StatelessWidget {
         imageHeight: 112,
         imageWidth: 84,
         imageTopPadding: 16,
+        onTap: () => searchFieldFocusNode.requestFocus(),
       ),
     );
   }
 }
 
 class LoadingError extends StatelessWidget {
-  const LoadingError({Key? key}) : super(key: key);
+  final VoidCallback onTap;
+
+  const LoadingError({Key? key, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: InfoWithButton(
-        title: "Error happened",
-        subtitle: "Please, try again",
-        buttonText: "Retry",
-        assetImage: SuperheroesImages.superman,
-        imageHeight: 106,
-        imageWidth: 126,
-        imageTopPadding: 22,
-      ),
+          title: "Error happened",
+          subtitle: "Please, try again",
+          buttonText: "Retry",
+          assetImage: SuperheroesImages.superman,
+          imageHeight: 106,
+          imageWidth: 126,
+          imageTopPadding: 22,
+          onTap: onTap),
     );
   }
 }

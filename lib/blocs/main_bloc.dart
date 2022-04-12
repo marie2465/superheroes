@@ -58,6 +58,7 @@ class MainBloc {
         stateSubject.add(MainPageState.searchResults);
       }
     }, onError: (error, stackTrace) {
+      print(error);
       stateSubject.add(MainPageState.loadingError);
     });
   }
@@ -97,7 +98,8 @@ class MainBloc {
       if (decoded['error'] == 'character with given name not found') {
         return [];
       }
-      throw Exception("Client error happened");
+      
+      throw ApiException("Client error happened");
     }
 
     ///{

@@ -201,9 +201,7 @@ class MainPageStateWidget extends StatelessWidget {
               searchFieldFocusNode: searchFieldFocusNode,
             );
           case MainPageState.loadingError:
-            return LoadingError(
-              onTap: () => bloc.retry(),
-            );
+            return LoadingError();
           default:
             return Center(
                 child: Text(
@@ -353,7 +351,7 @@ class NothingFound extends StatelessWidget {
       child: InfoWithButton(
         title: "Nothing found",
         subtitle: "Search for something else",
-        buttonText: "Search",
+        buttonText: "SEARCH",
         assetImage: SuperheroesImages.hulk,
         imageHeight: 112,
         imageWidth: 84,
@@ -365,12 +363,11 @@ class NothingFound extends StatelessWidget {
 }
 
 class LoadingError extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const LoadingError({Key? key, required this.onTap}) : super(key: key);
+  const LoadingError({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<MainBloc>(context, listen: false);
     return Center(
       child: InfoWithButton(
           title: "Error happened",
@@ -380,7 +377,7 @@ class LoadingError extends StatelessWidget {
           imageHeight: 106,
           imageWidth: 126,
           imageTopPadding: 22,
-          onTap: onTap),
+          onTap: bloc.retry),
     );
   }
 }

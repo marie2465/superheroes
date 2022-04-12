@@ -101,11 +101,6 @@ class MainBloc {
       
       throw ApiException("Client error happened");
     }
-
-    ///{
-    //     "response": "error",
-    //     "error": "character with given name not found"
-    // }
     return SuperheroInfo.mocked
         .where((superheroInfo) =>
             superheroInfo.name.toLowerCase().contains(text.toLowerCase()))
@@ -113,7 +108,8 @@ class MainBloc {
   }
 
   void retry(){
-
+    final currentText=currentTextSubject.value;
+    searchForSuperheroes(currentText);
   }
 
   Stream<MainPageState> observeMainPageState() => stateSubject;

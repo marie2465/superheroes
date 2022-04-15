@@ -15,6 +15,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   json_annotation: ^4.4.0
   cached_network_image: ^3.2.0
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,4 @@ flutter:
     - google_fonts/
     - assets/images/
     - .env
+    - assets/icons/

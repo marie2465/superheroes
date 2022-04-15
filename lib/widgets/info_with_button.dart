@@ -52,7 +52,7 @@ class InfoWithButton extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 32,
             fontWeight: FontWeight.w800,
             color: Colors.white,
@@ -61,7 +61,7 @@ class InfoWithButton extends StatelessWidget {
         const SizedBox(height: 20),
         Text(
           subtitle.toUpperCase(),
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: Colors.white,

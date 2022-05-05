@@ -24,16 +24,16 @@ class SuperheroBloc {
     requestSuperhero();
   }
 
-  void getFromFavorites(){
+  void getFromFavorites() {
     getFromFavoritesSubscription?.cancel();
     getFromFavoritesSubscription = FavoriteSuperheroesStorage.getInstance()
         .getSuperhero(id)
         .asStream()
         .listen(
-          (superhero) {
-            if(superhero!=null){
-              superheroSubject.add(superhero);
-            }
+      (superhero) {
+        if (superhero != null) {
+          superheroSubject.add(superhero);
+        }
         requestSuperhero();
       },
       onError: (error, stackTrace) =>
@@ -110,7 +110,9 @@ class SuperheroBloc {
     throw ApiException("Unknown error happened");
   }
 
-  Stream<Superhero> observeSuperhero() => superheroSubject;
+  Stream<Superhero> observeSuperhero() => superheroSubject.distinct();
+
+  Stream<Superhero> observeSuperheroPageState() => superheroSubject;
 
   void dispose() {
     client?.close();
@@ -123,3 +125,5 @@ class SuperheroBloc {
     superheroSubject.close();
   }
 }
+
+enum SuperheroPageState { loading, loaded, error }

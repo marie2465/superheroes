@@ -177,11 +177,12 @@ class MainPageStateWidget extends StatelessWidget {
           case MainPageState.searchResults:
             return SuperheroesList(
                 title: "Search results",
-                stream: bloc.observeSearchedSuperheroes());
+                stream: bloc.observeSearchedSuperheroes(),
+            ableToSwipe: false,);
           case MainPageState.favorites:
             return SuperheroesList(
                 title: "Your favorites",
-                stream: bloc.observeFavoriteSuperheroes());
+                stream: bloc.observeFavoriteSuperheroes(), ableToSwipe: true,);
           case MainPageState.nothingFound:
             return NothingFound(
               searchFieldFocusNode: searchFieldFocusNode,
@@ -267,11 +268,13 @@ class NoFavorites extends StatelessWidget {
 class SuperheroesList extends StatelessWidget {
   final String title;
   final Stream<List<SuperheroInfo>> stream;
+  final bool ableToSwipe;
 
   const SuperheroesList({
     Key? key,
     required this.title,
     required this.stream,
+    required this.ableToSwipe,
   }) : super(key: key);
 
   @override
@@ -291,7 +294,7 @@ class SuperheroesList extends StatelessWidget {
               return ListTitleWidget(title: title);
             }
             final SuperheroInfo item = superheroes[index - 1];
-            return ListTile(superhero: item);
+            return ListTile(superhero: item, ableToSwipe: ableToSwipe,);
           },
           separatorBuilder: (BuildContext context, int index) {
             return const SizedBox(height: 8);
@@ -304,44 +307,83 @@ class SuperheroesList extends StatelessWidget {
 
 class ListTile extends StatelessWidget {
   final SuperheroInfo superhero;
+  final bool ableToSwipe;
 
   const ListTile({
     Key? key,
     required this.superhero,
+    required this.ableToSwipe,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final MainBloc bloc = Provider.of<MainBloc>(context, listen: false);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Dismissible(
-        key: ValueKey(superhero.id),
+    if(ableToSwipe) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Dismissible(
+          key: ValueKey(superhero.id),
+          child: SuperheroCard(
+            superheroInfo: superhero,
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      SuperheroPage(
+                        id: superhero.id,
+                      )));
+            },
+          ),
+          secondaryBackground: Container(
+            height: 70,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: SuperheroesColors.red,
+            ),
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 16),
+            child: Text(
+              "Remove\nfrom\nfavorites".toUpperCase(),
+              textDirection: TextDirection.rtl,
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+          background: Container(
+            height: 70,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: SuperheroesColors.red,
+            ),
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 16),
+            child: Text(
+              "Remove\nfrom\nfavorites".toUpperCase(),
+              style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+          onDismissed: (_) => bloc.removeFromFavorites(superhero.id),
+        ),
+      );
+    } else{
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SuperheroCard(
           superheroInfo: superhero,
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => SuperheroPage(
+                builder: (context) =>
+                    SuperheroPage(
                       id: superhero.id,
                     )));
           },
         ),
-        background: Container(
-          height: 70,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: SuperheroesColors.red,
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            "Remove from favorites".toUpperCase(),
-            style: TextStyle(
-                fontSize: 12, color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-        ),
-        onDismissed: (_)=>bloc.removeFromFavorites(superhero.id),
-      ),
-    );
+      );
+    }
   }
 }
 
